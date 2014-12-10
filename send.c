@@ -56,7 +56,14 @@ int main(){
 	    	}
 	    }
 	    memcpy(shm+1 ,buffer ,(SIZE-1));
-	    memset(shm ,2 ,1); // control code = sent
+	    if (buffer[0]=='q' && buffer[1]=='\0'){
+	    	// bye
+	    	control_code=3;
+	    	memset(shm ,3 ,1);
+	    }else{
+	    	// control code = sent
+	    	memset(shm ,2 ,1);
+	    }
     }
     
     

@@ -9,7 +9,48 @@
 
 #define SIZE 17
 
+struct dictionary{
+		char string[SIZE-1];
+		int count;
+};
+
+void debug(struct dictionary *_wordList ,int _wordList_count){
+	printf("total count:%d\nList:\n", _wordList_count);
+	for (int i = 0; i < _wordList_count; ++i){
+		printf("%d %s\n", _wordList[i].count , _wordList[i].string);
+	}
+}
+
+void insert_word(struct dictionary *_wordList ,int *_wordList_count ,char *_word){
+	if (*_wordList_count==0){
+		_wordList[0].count=1;
+		strcpy(_wordList[0].string ,_word);
+		*_wordList_count=*_wordList_count+1;	
+	}else{
+		int finding = -1;
+
+		for (int i = 0; i < *_wordList_count; ++i){
+			if (strcmp(_wordList[i].string ,_word)==0){
+				//match the string in wordList
+				finding=i;
+			}
+		}
+		if (finding!=-1){
+			//match the string in wordList , count ++
+			_wordList[finding].count++;
+		}else{
+			_wordList[*_wordList_count].count=1;
+			strcpy(_wordList[*_wordList_count].string ,_word);
+			*_wordList_count=*_wordList_count+1;		
+		}
+	}
+	debug(_wordList,*_wordList_count);
+}
+
 int main(){
+
+	
+
 	key_t key; // key for shm
     int shmid = 0; // this is for shm's id , use this to get mem area
     char *shm = NULL; // pointer to shared mem
@@ -36,12 +77,33 @@ int main(){
     // 2 = sent
     // 3 = exit
 
+    struct dictionary wordList[100];
+    int wordList_count=0;
+
     while(control_code!=3){
     	memcpy(buffer ,shm ,(SIZE-1));
     	control_code = (int) buffer[0];
     	if (control_code!=1){
-	    	printf("%s\n", buffer+1);
 			memset(shm ,1 ,1); // reset control code
+			char word_buffer[SIZE-1];
+			memcpy(word_buffer ,buffer+1 ,SIZE-2);
+			switch(word_buffer[0]){
+				case '%':
+
+					break;
+				case '$':
+
+
+					break;
+				default:
+					insert_word(wordList ,&wordList_count ,word_buffer);
+
+			}
+
+
+
+
+
     	}
     	
     	sleep(0.5);

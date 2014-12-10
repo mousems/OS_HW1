@@ -31,7 +31,19 @@ int main(){
         return 0;
     }
     char buffer[(SIZE - 1)];
-    memcpy(buffer ,shm+1 ,(SIZE-1));
+    int control_code = 1;
+    // 1 = init , ready for send
+    // 2 = sent
+    // 3 = exit
 
-    printf("%s\n", buffer);
+    while(control_code!=3){
+    	memcpy(buffer ,shm ,(SIZE-1));
+    	control_code = (int) buffer[0];
+    	if (control_code!=1){
+	    	printf("%s\n", buffer+1);
+			memset(shm ,1 ,1); // reset control code
+    	}
+    	
+    	sleep(0.5);
+    }
 }

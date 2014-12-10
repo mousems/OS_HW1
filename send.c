@@ -33,9 +33,28 @@ int main(){
     }
 
 	char buffer[(SIZE - 1)];
-    fgets(buffer ,SIZE ,stdin);
+
+    int control_code = 1;
+    // 1 = init , ready for send
+    // 2 = sent
+    // 3 = exit
+
+    printf("You can sending:\n");
+    printf("(1) string to receiver\n");
+    printf("(2) %%string for searching\n");
+    printf("(3) $ for counting\n");
+    printf("(4) q for quit\n\n");
+
+    memset(shm ,1 ,1);// reset control code
+
+    while(control_code!=3){
+    	printf("Please send something >>");
+	    fgets(buffer ,SIZE ,stdin);
+	    memcpy(shm+1 ,buffer ,(SIZE-1));
+	    memset(shm ,2 ,1); // control code = sent
+    }
     
-    memcpy(shm+1 ,buffer ,(SIZE-1));
+    
 
 
 }

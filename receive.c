@@ -20,6 +20,7 @@ void dump_word(struct dictionary *_wordList ,int _wordList_count){
 	for (int i = 0; i < _wordList_count; ++i){
 		printf("%d %s\n", _wordList[i].count , _wordList[i].string);
 	}
+	printf("\n");
 }
 
 
@@ -120,9 +121,9 @@ int main(){
 					memcpy(word_buffer ,buffer+2 ,SIZE-3);
 					int answer = search_word(wordList ,wordList_count ,word_buffer);
 					if (answer==0){
-						printf("No.\n");
+						printf("No.\n\n");
 					}else{
-						printf("Yes.\n");
+						printf("Yes.\n\n");
 					}
 					break;
 				case '$':

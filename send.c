@@ -50,6 +50,11 @@ int main(){
     while(control_code!=3){
     	printf("Please send something >>");
 	    fgets(buffer ,SIZE ,stdin);
+	    for (int i = 0; i < SIZE; ++i){
+	    	if (buffer[i]=='\n'){
+	    		buffer[i]='\0';
+	    	}
+	    }
 	    memcpy(shm+1 ,buffer ,(SIZE-1));
 	    memset(shm ,2 ,1); // control code = sent
     }

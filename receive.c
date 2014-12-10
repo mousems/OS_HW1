@@ -14,8 +14,7 @@ struct dictionary{
 		int count;
 };
 
-void debug(struct dictionary *_wordList ,int _wordList_count){
-	printf("total count:%d\nList:\n", _wordList_count);
+void dump_word(struct dictionary *_wordList ,int _wordList_count){
 	for (int i = 0; i < _wordList_count; ++i){
 		printf("%d %s\n", _wordList[i].count , _wordList[i].string);
 	}
@@ -44,7 +43,6 @@ void insert_word(struct dictionary *_wordList ,int *_wordList_count ,char *_word
 			*_wordList_count=*_wordList_count+1;		
 		}
 	}
-	debug(_wordList,*_wordList_count);
 }
 int search_word(struct dictionary *_wordList ,int _wordList_count ,char *_word){
 	//0 for no , 1 for yes
@@ -109,8 +107,7 @@ int main(){
 					}
 					break;
 				case '$':
-
-
+					dump_word(wordList ,wordList_count);
 					break;
 				default:
 					insert_word(wordList ,&wordList_count ,word_buffer);

@@ -14,12 +14,18 @@ struct dictionary{
 		int count;
 };
 
+
+//this simple function will dump all word/count in wordList
 void dump_word(struct dictionary *_wordList ,int _wordList_count){
 	for (int i = 0; i < _wordList_count; ++i){
 		printf("%d %s\n", _wordList[i].count , _wordList[i].string);
 	}
 }
 
+
+//this simple function will deal with new word
+//if word is new one , it push into _wordList
+//if word is old one , it will let the word in List's count ++
 void insert_word(struct dictionary *_wordList ,int *_wordList_count ,char *_word){
 	if (*_wordList_count==0){
 		_wordList[0].count=1;
@@ -44,8 +50,10 @@ void insert_word(struct dictionary *_wordList ,int *_wordList_count ,char *_word
 		}
 	}
 }
+
+//this simple function will searching _word in _wordList 
+//return 0 for no(not found) , 1 for yes
 int search_word(struct dictionary *_wordList ,int _wordList_count ,char *_word){
-	//0 for no , 1 for yes
 	int finding = 0;
 	for (int i = 0; i < _wordList_count; ++i){
 		
@@ -56,10 +64,8 @@ int search_word(struct dictionary *_wordList ,int _wordList_count ,char *_word){
 	}
 	return finding;
 }
+
 int main(){
-
-	
-
 	key_t key; // key for shm
     int shmid = 0; // this is for shm's id , use this to get mem area
     char *shm = NULL; // pointer to shared mem
@@ -81,6 +87,7 @@ int main(){
         return 0;
     }
     char buffer[(SIZE - 1)];
+
     int control_code = 1;
     // 1 = init , ready for send
     // 2 = sent
@@ -90,14 +97,26 @@ int main(){
     int wordList_count=0;
 
     while(control_code!=3){
+
+    	// try to get data
     	memcpy(buffer ,shm ,(SIZE-1));
+    	
+    	// the first char in buffer is control code
     	control_code = (int) buffer[0];
+
+
     	if (control_code!=1){
+    		// someone has sent a data
 			memset(shm ,1 ,1); // reset control code
+
 			char word_buffer[SIZE-1];
 			memcpy(word_buffer ,buffer+1 ,SIZE-2);
+			// try to get data after control code
+
 			switch(word_buffer[0]){
 				case '%':
+					//first char is % , will search in the wordList
+					//parser the string after %
 					memcpy(word_buffer ,buffer+2 ,SIZE-3);
 					int answer = search_word(wordList ,wordList_count ,word_buffer);
 					if (answer==0){
@@ -107,17 +126,14 @@ int main(){
 					}
 					break;
 				case '$':
+					//first char is $ , dump out all data from wordList
 					dump_word(wordList ,wordList_count);
 					break;
 				default:
+					//insert word into wordList
 					insert_word(wordList ,&wordList_count ,word_buffer);
 
 			}
-
-
-
-
-
     	}
     	
     	sleep(0.5);

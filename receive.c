@@ -46,7 +46,18 @@ void insert_word(struct dictionary *_wordList ,int *_wordList_count ,char *_word
 	}
 	debug(_wordList,*_wordList_count);
 }
-
+int search_word(struct dictionary *_wordList ,int _wordList_count ,char *_word){
+	//0 for no , 1 for yes
+	int finding = 0;
+	for (int i = 0; i < _wordList_count; ++i){
+		
+		if (strcmp(_wordList[i].string ,_word)==0){
+			//match the string in wordList
+			finding=1;
+		}
+	}
+	return finding;
+}
 int main(){
 
 	
@@ -89,7 +100,13 @@ int main(){
 			memcpy(word_buffer ,buffer+1 ,SIZE-2);
 			switch(word_buffer[0]){
 				case '%':
-
+					memcpy(word_buffer ,buffer+2 ,SIZE-3);
+					int answer = search_word(wordList ,wordList_count ,word_buffer);
+					if (answer==0){
+						printf("No.\n");
+					}else{
+						printf("Yes.\n");
+					}
 					break;
 				case '$':
 
